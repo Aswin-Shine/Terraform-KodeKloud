@@ -1,0 +1,21 @@
+The Nautilus DevOps team is currently engaged in a cleanup process, focusing on removing unnecessary data and services from their AWS account. As part of the migration process, several resources were created for one-time use only, necessitating a cleanup effort to optimize their AWS environment.
+
+A S3 bucket named datacenter-bck-26940 already exists.
+
+1. Copy the contents of datacenter-bck-26940 S3 bucket to /opt/s3-backup/ directory on terraform-client host (the landing host once you load this lab).
+
+2. Delete the S3 bucket datacenter-bck-26940.
+
+3. Use the AWS CLI through Terraform to accomplish this task—for example, by running AWS CLI commands within Terraform. The Terraform working directory is /home/bob/terraform. Update the main.tf file (do not create a separate .tf file) to accomplish this task.
+
+Solution :
+
+Add this to main.tf file
+
+```
+resource "null_resource" "aws_cli" {
+  provisioner "local-exec" {
+    command = "aws s3 cp s3://datacenter-bck-26940 /opt/s3-backup/ --recursive && aws s3 rm s3://datacenter-bck-26940 --recursive && aws s3api delete-bucket --bucket datacenter-bck-26940"
+  }
+}
+```
